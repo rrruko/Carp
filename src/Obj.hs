@@ -201,7 +201,14 @@ freshVar i = "_" ++ show (infoIdentifier i)
 data XObj = XObj { obj :: Obj
                  , info :: Maybe Info
                  , ty :: Maybe Ty
-                 } deriving (Show, Eq, Ord)
+                 } deriving (Eq, Ord)
+
+-- A less noisy show
+instance Show XObj where
+  show (XObj o i t) = "XObj{ " ++ show o ++ tt ++ " }"
+    where tt = case t of
+                 Just t -> " : " ++ show t
+                 Nothing -> ""
 
 getBinderDescription :: XObj -> String
 getBinderDescription (XObj (Lst (XObj (Defn _) _ _ : XObj (Sym _ _) _ _ : _)) _ _) = "defn"

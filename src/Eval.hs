@@ -474,15 +474,21 @@ specialCommandDefine ctx xobj =
 getSigFromDefnOrDef :: Context -> Env -> FilePathPrintLength -> XObj -> (Either EvalError (Maybe (Ty, XObj)))
 getSigFromDefnOrDef ctx globalEnv fppl xobj =
   let metaData = existingMeta globalEnv xobj
-  in  case Map.lookup "sig" (getMeta metaData) of
-        Just foundSignature ->
-          case xobjToTy foundSignature of
-            Just t -> let sigToken = XObj (Sym (SymPath [] "sig") Symbol) Nothing Nothing
-                          nameToken = XObj (Sym (SymPath [] (getName xobj)) Symbol) Nothing Nothing
-                          recreatedSigForm = XObj (Lst [sigToken, nameToken, foundSignature]) Nothing (Just MacroTy)
-                      in Right (Just (t, recreatedSigForm))
-            Nothing -> Left (EvalError ("Can't use '" ++ pretty foundSignature ++ "' as a type signature") (contextHistory ctx) fppl (info xobj))
-        Nothing -> Right Nothing
+      pathStrings = contextPath ctx
+      fullPath = (getPath xobj)
+      --env = getEnv globalEnv pathStrings
+  in case lookupInEnv (trace ("Looking for meta at " ++ show pathStrings ++ ", xobj's path is " ++ show (getPath xobj)) fullPath) globalEnv of
+       Just (_, Binder metaData _) ->
+         case Map.lookup "sig" (getMeta metaData) of
+             Just foundSignature ->
+               case xobjToTy (trace ("Found sig " ++ pretty foundSignature) foundSignature) of
+                 Just t -> let sigToken = XObj (Sym (SymPath [] "sig") Symbol) Nothing Nothing
+                               nameToken = XObj (Sym (SymPath [] (getName xobj)) Symbol) Nothing Nothing
+                               recreatedSigForm = XObj (Lst [sigToken, nameToken, foundSignature]) Nothing (Just MacroTy)
+                           in Right (Just (t, recreatedSigForm))
+                 Nothing -> Left (EvalError ("Can't use '" ++ pretty foundSignature ++ "' as a type signature") (contextHistory ctx) fppl (info xobj))
+             Nothing -> Right Nothing
+       Nothing -> Right Nothing
 
 annotateWithinContext :: Bool -> Context -> XObj -> IO (Context, Either EvalError (XObj, [XObj]))
 annotateWithinContext qualifyDefn ctx xobj = do
