@@ -476,8 +476,8 @@ getSigFromDefnOrDef ctx globalEnv fppl xobj =
   let metaData = existingMeta globalEnv xobj
       pathStrings = contextPath ctx
       fullPath = (getPath xobj)
-      --env = getEnv globalEnv pathStrings
-  in case lookupInEnv (trace ("Looking for meta at " ++ show pathStrings ++ ", xobj's path is " ++ show (getPath xobj)) fullPath) globalEnv of
+      env = getEnv globalEnv pathStrings
+  in case lookupInEnv (trace ("Looking for meta at " ++ show pathStrings ++ ", xobj's path is " ++ show (getPath xobj)) fullPath) env of
        Just (_, Binder metaData _) ->
          case Map.lookup "sig" (getMeta metaData) of
              Just foundSignature ->
