@@ -18,7 +18,6 @@
 (load-once "Interfaces.carp")
 (load-once "Bool.carp")
 (load-once "Macros.carp")
-(load-once "Introspect.carp")
 (load-once "Pointer.carp")
 (load-once "Unsafe.carp")
 (load-once "Generics.carp")
