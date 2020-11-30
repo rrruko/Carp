@@ -2,7 +2,7 @@
 (use Test)
 (use StaticArray)
 
-(defn inc-ref [x] (+ @x 1))
+(defn inc-ref [x] (+ x 1))
 
 (deftest test
 
