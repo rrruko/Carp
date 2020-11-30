@@ -222,12 +222,12 @@ If the element is not found, returns `Nothing`")
 
   (doc aupdate "transmutes (i.e. updates) the element at index `i` of an array `a` using the function `f`.")
   (defn aupdate [a i f]
-    (let [new-value (~f (unsafe-nth &a i))]
+    (let [new-value (~f @(unsafe-nth &a i))]
       (aset a i new-value)))
 
   (doc aupdate! "transmutes (i.e. updates) the element at index `i` of an array `a` using the function `f` in place.")
   (defn aupdate! [a i f]
-    (aset! a i (~f (unsafe-nth a i))))
+    (aset! a i (~f @(unsafe-nth a i))))
 
   (doc swap "swaps the indices `i` and `j` of an array `a`.")
   (defn swap [a i j]

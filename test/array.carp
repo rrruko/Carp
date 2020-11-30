@@ -9,7 +9,7 @@
 (defn excl [x] (String.append &x "!"))
 (defn excl-ref [x] (String.append x "!"))
 
-(defn inc-ref [x] (+ @x 1))
+(defn inc-ref [x] (+ x 1))
 
 (defn make-zero [] 0)
 (defn make-idx [i] i)

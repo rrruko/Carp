@@ -6,7 +6,7 @@
 (def n 1000)
 
 (defn inc-ref [ir]
-  (+ 1 @ir))
+  (+ 1 ir))
 
 (defn some-updating []
   (let-do [a (replicate n &12345)
